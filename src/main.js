@@ -2,11 +2,13 @@ import React from "react";
 import ReactDOM from "react-dom";
 import { Router, Route, IndexRoute, hashHistory } from "react-router";
 
- import Archives from "./pages/Archives";
+//import Archives from "./pages/Archives";
 // import Featured from "./pages/Featured";
 // import Settings from "./pages/Settings";
 import Nav from "./components/Nav.js";
 import Tables from "./components/Table.js";
+import Loadfile from "./components/Loadfile.js";
+import Seeresult from "./components/Seeresult.js";
 //
 // import Layout from "./components/Layout";
 
@@ -23,12 +25,13 @@ ReactDOM.render(
   <Router history={hashHistory}>
     <Route path="/" component={Nav}>
       <IndexRoute component={Tables} />
-      <Route path="accounts" component={Archives}/>
+      <Route path="loadfile" name="loadfile" component={Loadfile}></Route>
+      <Route path="seeresult" name="seeresult" component={Seeresult}></Route>
     </Route>
   </Router>
 
   , app);
-
+  //<Route path="accounts" component={Archives}/>
   // <Route path="archives" name="archives" component={Archives}></Route>
   // <Route path="archives" name="archives" component={Archives}></Route>
   // <Route path="settings" name="settings" component={Settings}></Route>
