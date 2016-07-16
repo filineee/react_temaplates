@@ -68,7 +68,7 @@
 
 	var _Loadfile2 = _interopRequireDefault(_Loadfile);
 
-	var _Seeresult = __webpack_require__(233);
+	var _Seeresult = __webpack_require__(235);
 
 	var _Seeresult2 = _interopRequireDefault(_Seeresult);
 
@@ -26057,6 +26057,30 @@
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
+	function langAPI(lang, field) {
+	  var getLang = function getLang(lang, field) {
+
+	    var lang_arr = {
+	      en: {
+	        main: "Main",
+	        action: "Action",
+	        loadfile: "Load file(s)",
+	        checkresult: "Check results"
+	      },
+	      ru: {
+	        main: "Главная",
+	        action: "Действие",
+	        loadfile: "Загрузить файл",
+	        checkresult: "Просмотреть результаты"
+	      }
+	    };
+
+	    return lang_arr[lang][field];
+	  };
+
+	  return getLang(lang, field);
+	}
+
 	var NavbarHeader = function (_React$Component) {
 	  _inherits(NavbarHeader, _React$Component);
 
@@ -26067,6 +26091,12 @@
 	  }
 
 	  _createClass(NavbarHeader, [{
+	    key: "showHideTogle",
+	    value: function showHideTogle() {
+	      this.props.showHide(!this.props.mob_collapsed);
+	      console.log(this.props);
+	    }
+	  }, {
 	    key: "render",
 	    value: function render() {
 	      return _react2.default.createElement(
@@ -26075,7 +26105,7 @@
 	        },
 	        _react2.default.createElement(
 	          "button",
-	          { type: "button", className: "navbar-toggle collapsed", "data-toggle": "collapse", "data-target": "#bs-example-navbar-collapse-1", __self: this
+	          { type: "button", className: "navbar-toggle collapsed", "data-toggle": "collapse", "data-target": "#bs-example-navbar-collapse-1", onClick: this.showHideTogle.bind(this), __self: this
 	          },
 	          _react2.default.createElement(
 	            "span",
@@ -26111,14 +26141,20 @@
 
 	    var _this2 = _possibleConstructorReturn(this, Object.getPrototypeOf(NavbarItems).call(this));
 
-	    _this2.state = { collapsed: true };
+	    _this2.state = {
+	      collapsed: true
+	    };
 	    return _this2;
 	  }
 
 	  _createClass(NavbarItems, [{
+	    key: "componentWillMount",
+	    value: function componentWillMount() {
+	      this.setState({ mob_collapsed: this.props.mob_collapsed });
+	    }
+	  }, {
 	    key: "toggleCollapsed",
 	    value: function toggleCollapsed() {
-	      console.log(this.state);
 	      var collapsed = !this.state.collapsed;
 	      this.setState({ collapsed: collapsed });
 	    }
@@ -26126,13 +26162,24 @@
 	    key: "render",
 	    value: function render() {
 	      var collapsed = this.state.collapsed;
+	      var mob_collapsed = this.props.mob_collapsed;
+	      var location = this.props.location;
 
 
 	      var navClass = collapsed ? "" : "open";
 
+	      var mob_open = mob_collapsed ? "" : "in";
+	      var mob_aria = mob_collapsed ? 'aria-expanded="true"' : "";
+
+	      var loadFileClassActive = location.pathname.match(/loadfile/) ? 'active' : '';
+	      var checkresultClassActive = location.pathname.match(/seeresult/) ? 'active' : '';
+	      var menuGrpClassActive = loadFileClassActive == 'active' || checkresultClassActive == 'active' ? 'active' : '';
+
+	      var mainClassActive = location.pathname.match(/^\/$/) ? 'active' : '';
+
 	      return _react2.default.createElement(
 	        "div",
-	        { className: "collapse navbar-collapse", id: "bs-example-navbar-collapse-1", __self: this
+	        { className: "navbar-collapse collapse " + mob_open, id: "bs-example-navbar-collapse-1", __self: this
 	        },
 	        _react2.default.createElement(
 	          "ul",
@@ -26140,25 +26187,25 @@
 	          },
 	          _react2.default.createElement(
 	            "li",
-	            {
-	              __self: this
+	            { className: mainClassActive, __self: this
 	            },
 	            _react2.default.createElement(
 	              _reactRouter.Link,
 	              { to: "/", __self: this
 	              },
-	              "Главная"
+	              langAPI(this.props.lang, 'main')
 	            )
 	          ),
 	          _react2.default.createElement(
 	            "li",
-	            { className: "dropdown" + " " + navClass, onClick: this.toggleCollapsed.bind(this), __self: this
+	            { className: "dropdown" + " " + navClass + " " + menuGrpClassActive, onClick: this.toggleCollapsed.bind(this), __self: this
 	            },
 	            _react2.default.createElement(
 	              "a",
 	              { className: "dropdown-toggle", "data-toggle": "dropdown", role: "button", "aria-expanded": "false", __self: this
 	              },
-	              "Действие ",
+	              langAPI(this.props.lang, 'action'),
+	              " ",
 	              _react2.default.createElement("span", { className: "caret", __self: this
 	              })
 	            ),
@@ -26168,33 +26215,34 @@
 	              },
 	              _react2.default.createElement(
 	                "li",
-	                {
-	                  __self: this
+	                { className: loadFileClassActive, __self: this
 	                },
 	                _react2.default.createElement(
 	                  _reactRouter.Link,
 	                  { to: "loadfile", __self: this
 	                  },
-	                  "Загрузить файл"
+	                  langAPI(this.props.lang, 'loadfile'),
+	                  " "
 	                )
 	              ),
 	              _react2.default.createElement("li", { className: "divider", __self: this
 	              }),
 	              _react2.default.createElement(
 	                "li",
-	                {
-	                  __self: this
+	                { className: checkresultClassActive, __self: this
 	                },
 	                _react2.default.createElement(
 	                  _reactRouter.Link,
 	                  { to: "seeresult", __self: this
 	                  },
-	                  "Посмотреть результаты"
+	                  langAPI(this.props.lang, 'checkresult')
 	                )
 	              )
 	            )
 	          )
 	        ),
+	        _react2.default.createElement(NavbarLang, { changeLang: this.props.changeLang, __self: this
+	        }),
 	        _react2.default.createElement(
 	          "ul",
 	          { className: "nav navbar-nav navbar-right", __self: this
@@ -26214,6 +26262,57 @@
 
 	  return NavbarItems;
 	}(_react2.default.Component);
+
+	var NavbarLang = function (_React$Component3) {
+	  _inherits(NavbarLang, _React$Component3);
+
+	  function NavbarLang() {
+	    _classCallCheck(this, NavbarLang);
+
+	    return _possibleConstructorReturn(this, Object.getPrototypeOf(NavbarLang).apply(this, arguments));
+	  }
+
+	  _createClass(NavbarLang, [{
+	    key: "render",
+	    value: function render() {
+	      var _this4 = this;
+
+	      return _react2.default.createElement(
+	        "ul",
+	        { className: "nav navbar-nav navbar-right", __self: this
+	        },
+	        _react2.default.createElement(
+	          "li",
+	          { onClick: function onClick() {
+	              _this4.props.changeLang('ru');
+	            }, __self: this
+	          },
+	          _react2.default.createElement(
+	            "a",
+	            { href: "#", __self: this
+	            },
+	            "RU"
+	          )
+	        ),
+	        _react2.default.createElement(
+	          "li",
+	          { onClick: function onClick() {
+	              _this4.props.changeLang('en');
+	            }, __self: this
+	          },
+	          _react2.default.createElement(
+	            "a",
+	            { href: "#", __self: this
+	            },
+	            "EN"
+	          )
+	        )
+	      );
+	    }
+	  }]);
+
+	  return NavbarLang;
+	}(_react2.default.Component);
 	//<li class="active"><a href="#">Link <span class="sr-only">(current)</span></a></li>
 	// <form class="navbar-form navbar-left" role="search">
 	//   <div class="form-group">
@@ -26223,18 +26322,36 @@
 	// </form>
 
 
-	var Nav = function (_React$Component3) {
-	  _inherits(Nav, _React$Component3);
+	var Nav = function (_React$Component4) {
+	  _inherits(Nav, _React$Component4);
 
 	  function Nav() {
 	    _classCallCheck(this, Nav);
 
-	    return _possibleConstructorReturn(this, Object.getPrototypeOf(Nav).call(this));
+	    var _this5 = _possibleConstructorReturn(this, Object.getPrototypeOf(Nav).call(this));
+
+	    _this5.state = {
+	      lang: 'ru',
+	      mob_collapsed: true
+	    };
+	    return _this5;
 	  }
 
 	  _createClass(Nav, [{
+	    key: "changeLang",
+	    value: function changeLang(lang) {
+	      //let lang = this.state.lang == 'ru'? 'en': 'ru';
+	      this.setState({ lang: lang });
+	    }
+	  }, {
+	    key: "showHide",
+	    value: function showHide(mob_collapsed) {
+	      this.setState({ mob_collapsed: mob_collapsed });
+	    }
+	  }, {
 	    key: "render",
 	    value: function render() {
+	      console.log(this.props.location);
 	      return _react2.default.createElement(
 	        "div",
 	        {
@@ -26248,11 +26365,9 @@
 	            "div",
 	            { className: "container-fluid", __self: this
 	            },
-	            _react2.default.createElement(NavbarHeader, {
-	              __self: this
+	            _react2.default.createElement(NavbarHeader, { lang: this.state.lang, showHide: this.showHide.bind(this), mob_collapsed: this.state.mob_collapsed, __self: this
 	            }),
-	            _react2.default.createElement(NavbarItems, {
-	              __self: this
+	            _react2.default.createElement(NavbarItems, { lang: this.state.lang, changeLang: this.changeLang.bind(this), mob_collapsed: this.state.mob_collapsed, location: this.props.location, __self: this
 	            })
 	          )
 	        ),
@@ -26618,11 +26733,11 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _reactDropzone = __webpack_require__(236);
+	var _reactDropzone = __webpack_require__(233);
 
 	var _reactDropzone2 = _interopRequireDefault(_reactDropzone);
 
-	var _FileUploadAjax = __webpack_require__(237);
+	var _FileUploadAjax = __webpack_require__(234);
 
 	var _FileUploadAjax2 = _interopRequireDefault(_FileUploadAjax);
 
@@ -26655,15 +26770,14 @@
 
 	            this.setState({
 	                files: files
+	            }, function () {
+	                (0, _FileUploadAjax2.default)({ files: _this2.state.files, url: 'getfile.php', filesFieldName: 'name', method: 'POST' });
 	            });
-
-	            setTimeout(function () {
-	                console.log(_this2.state);
-	            }, 2000);
 	        }
 	    }, {
 	        key: 'render',
 	        value: function render() {
+	            console.log(this.props.location);
 	            return _react2.default.createElement(
 	                'div',
 	                {
@@ -26692,59 +26806,6 @@
 
 /***/ },
 /* 233 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	exports.default = undefined;
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	var _react = __webpack_require__(1);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	var Loadfile = function (_React$Component) {
-	  _inherits(Loadfile, _React$Component);
-
-	  function Loadfile() {
-	    _classCallCheck(this, Loadfile);
-
-	    return _possibleConstructorReturn(this, Object.getPrototypeOf(Loadfile).apply(this, arguments));
-	  }
-
-	  _createClass(Loadfile, [{
-	    key: "render",
-	    value: function render() {
-	      return _react2.default.createElement(
-	        "div",
-	        { className: "seeresult", __self: this
-	        },
-	        "seeresult"
-	      );
-	    }
-	  }]);
-
-	  return Loadfile;
-	}(_react2.default.Component);
-
-	exports.default = Loadfile;
-
-/***/ },
-/* 234 */,
-/* 235 */,
-/* 236 */
 /***/ function(module, exports, __webpack_require__) {
 
 	(function webpackUniversalModuleDefinition(root, factory) {
@@ -27142,7 +27203,7 @@
 	//# sourceMappingURL=index.js.map
 
 /***/ },
-/* 237 */
+/* 234 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -27183,6 +27244,7 @@
 	    var file = files[i];
 	    formData.append(filesFieldName + '[' + i + ']', file, file.name);
 	  }
+	  console.log(FormData);
 
 	  Object.keys(data || {}).forEach(function (key) {
 	    formData.append(key, data[key]);
@@ -27203,6 +27265,57 @@
 
 	  xhr.send(formData);
 	}
+
+/***/ },
+/* 235 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.default = undefined;
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var Loadfile = function (_React$Component) {
+	  _inherits(Loadfile, _React$Component);
+
+	  function Loadfile() {
+	    _classCallCheck(this, Loadfile);
+
+	    return _possibleConstructorReturn(this, Object.getPrototypeOf(Loadfile).apply(this, arguments));
+	  }
+
+	  _createClass(Loadfile, [{
+	    key: "render",
+	    value: function render() {
+	      return _react2.default.createElement(
+	        "div",
+	        { className: "seeresult", __self: this
+	        },
+	        "seeresult"
+	      );
+	    }
+	  }]);
+
+	  return Loadfile;
+	}(_react2.default.Component);
+
+	exports.default = Loadfile;
 
 /***/ }
 /******/ ]);

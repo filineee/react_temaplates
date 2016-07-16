@@ -16,6 +16,7 @@ export default function ajaxUpload({
     let file = files[i];
     formData.append(`${filesFieldName}[${i}]`, file, file.name);
   }
+    console.log(FormData);
 
   Object.keys(data || {}).forEach(function (key) {
     formData.append(key, data[key])

@@ -13,18 +13,15 @@ export default class  Loadfile extends React.Component {
    _handleFileDrop (files) {
       this.setState({
         files: files
-      }, ()=>{ 
-          
-          ajaxUpload( {files: this.state.files, url: 'getfile.php', filesFieldName: 'name', method: 'POST'} );
-
-          console.log(this.state) ) };
-
-       
+        }, ()=>{ 
+              ajaxUpload( {files: this.state.files, url: 'getfile.php', filesFieldName: 'name', method: 'POST'} );
+          });
 
    }
 
 
   render() {
+    console.log(this.props.location);
       return (
           <div>
             <Dropzone onDrop={this._handleFileDrop.bind(this)}>
