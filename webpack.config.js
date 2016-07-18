@@ -18,7 +18,7 @@ module.exports = {
         loader: 'babel-loader',
         query: {
           presets: ['react', 'es2015', 'stage-0'],
-          plugins: ['react-html-attrs', 'transform-class-properties', 'transform-decorators-legacy'],
+          plugins: ['react-html-attrs', 'transform-class-properties', 'transform-decorators-legacy']
         }
       }
     ]
@@ -27,6 +27,22 @@ module.exports = {
       path: __dirname + "/prod/js/",
       filename: "main.js"
   },
+  devServer: {
+      proxy: {
+          '/dump*': {
+              target: 'http://127.0.0.1:8081/dump',
+              ignorePath: true,
+              changeOrigin: true,
+              secure: false
+          }
+      },
+    
+      contentBase: '/home/dev/my_dev/TestTask/react_study/prod/' 
+
+  }
+
+
+
   // plugins: debug ? [] : [
   //   //new webpack.optimize.DedupePlugin(),
   //   //new webpack.optimize.OccurenceOrderPlugin(),
