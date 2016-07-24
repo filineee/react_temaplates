@@ -1,30 +1,10 @@
 import React from 'react';
 import {Link} from "react-router";
+import marked from 'marked';
+import langAPI from "./langAPI.js";
 
+console.log(langAPI);
 
-function langAPI (lang, field) {
-    var getLang = function (lang, field) {
-
-        var lang_arr =  {
-            en: {
-                main: "Main",
-                action: "Action",
-                loadfile: "Load file(s)",
-                checkresult: "Check results"
-            },
-            ru: {
-                main: "Главная",
-                action: "Действие",
-                loadfile: "Загрузить файл",
-                checkresult: "Просмотреть результаты"
-            }
-        }
-        
-        return lang_arr[lang][field];
-    };    
-
-    return getLang (lang, field);
-} 
 
 class NavbarHeader extends React.Component {
 
@@ -36,7 +16,10 @@ class NavbarHeader extends React.Component {
   render() {
     return (
           <div class="navbar-header">
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" onClick={this.showHideTogle.bind(this)}>
+          {/*Some comment*/}
+            <button 
+            /*some comment 2*/
+            type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" onClick={this.showHideTogle.bind(this)}>
               <span class="sr-only">Toggle navigation</span>
               <span class="icon-bar"></span>
               <span class="icon-bar"></span>
@@ -88,13 +71,13 @@ class NavbarItems extends React.Component {
     return (
       <div class={ "navbar-collapse collapse " + mob_open}  id="bs-example-navbar-collapse-1" >
         <ul class="nav navbar-nav">
-          <li class={mainClassActive}><Link to="/">{ langAPI(this.props.lang, 'main') }</Link></li>
+          <li class={mainClassActive}><Link to="/">{ langAPI.getLang(this.props.lang, 'main') }</Link></li>
           <li class={"dropdown" + " " + navClass + " " + menuGrpClassActive}  onClick={this.toggleCollapsed.bind(this)}>
-            <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">{ langAPI(this.props.lang, 'action') } <span class="caret"></span></a>
+            <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">{ langAPI.getLang(this.props.lang, 'action') } <span class="caret"></span></a>
             <ul class="dropdown-menu" role="menu">
-              <li class={loadFileClassActive}><Link to="loadfile">{ langAPI(this.props.lang, 'loadfile') } </Link></li>
+              <li class={loadFileClassActive}><Link to="loadfile">{marked ( langAPI.getLang(this.props.lang, 'loadfile')) } </Link></li>
               <li class="divider"></li>
-              <li class={checkresultClassActive}><Link to="seeresult">{ langAPI(this.props.lang, 'checkresult') }</Link></li>
+              <li class={checkresultClassActive}><Link to="seeresult">{ langAPI.getLang(this.props.lang, 'checkresult') }</Link></li>
 
             </ul>
           </li>
@@ -146,7 +129,6 @@ export default class Nav extends React.Component {
   }
 
   render() {
-    console.log(this.props.location);
     return (
       <div>
         <nav class="navbar navbar-default">

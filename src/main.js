@@ -1,6 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import { Router, Route, IndexRoute, hashHistory } from "react-router";
+import 'whatwg-fetch';
 
 //import Archives from "./pages/Archives";
 // import Featured from "./pages/Featured";
@@ -9,6 +10,8 @@ import Nav from "./components/Nav.js";
 import Tables from "./components/Table.js";
 import Loadfile from "./components/Loadfile.js";
 import Seeresult from "./components/Seeresult.js";
+import langAPI from "./components/langAPI.js";
+
 //
 // import Layout from "./components/Layout";
 
@@ -17,20 +20,66 @@ import Seeresult from "./components/Seeresult.js";
 //     return <h1>It works!</h1>;
 //   };
 // }
+
 const app = document.getElementById('app');
 //ReactDOM.render(<Tables />, app);
 
 
-ReactDOM.render(
-  <Router history={hashHistory}>
-    <Route path="/" component={Nav}>
-      <IndexRoute component={Tables} />
-      <Route path="loadfile" name="loadfile" component={Loadfile}></Route>
-      <Route path="seeresult" name="seeresult" component={Seeresult}></Route>
-    </Route>
-  </Router>
+function init () {
 
-  , app);
+    fetch('./js/lang.json')
+        .then((response) => response.json().then((responseData) => {
+            langAPI.setLangData(responseData);
+            ReactDOM.render(
+                <RootsMainComp lang='ru' />
+                    , app);
+            }));
+}
+
+init();
+
+class ContactsAppContainer extends React.Component {
+
+    constructor() {
+        super();
+        this.state = {
+        };
+    }
+
+    componentWillMount() {
+
+        fetch('./js/lang.json')
+            .then((response) => response.json().then((responseData) => {
+                langAPI.setLangData(responseData);
+                ReactDOM.render(
+                    <RootsMainComp />
+                    , app);
+            }));
+        //.catch((error) => {
+        //    console.log('Error fetching and parsing data', error);
+        //});
+    }
+
+    render() {return (<div></div>);}
+
+}
+
+
+class RootsMainComp extends React.Component {
+    render(){
+        return (
+           <Router history={hashHistory} lang={this.props.lang}>
+            <Route path="/" component={Nav}>
+              <IndexRoute component={Tables} />
+              <Route path="loadfile" name="loadfile" component={Loadfile}></Route>
+              <Route path="seeresult" name="seeresult" component={Seeresult}></Route>
+            </Route>
+          </Router>
+          );
+    }
+}
+
+
   //<Route path="accounts" component={Archives}/>
   // <Route path="archives" name="archives" component={Archives}></Route>
   // <Route path="archives" name="archives" component={Archives}></Route>

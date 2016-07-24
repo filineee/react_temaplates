@@ -23,10 +23,12 @@ module.exports = {
       }
     ]
   },
+
   output: {
       path: __dirname + "/prod/js/",
       filename: "main.js"
   },
+  //devtool: "source-map",
   devServer: {
       proxy: {
           '/dump*': {
